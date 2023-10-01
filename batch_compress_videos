@@ -1,0 +1,15 @@
+#! /bin/bash
+
+shopt -s nullglob
+
+for file in *.mp4 *.MP4 *.MOV *.mpg *.MPG ; do
+	if [[ "$file" == *"_compressed"* ]]; then
+		continue
+	fi
+
+	ffmpeg -i "${file}" \
+		-c:v libx265 \
+		-crf 26 \
+		-c:a libopus -b:a 64k \
+		"${file%.*}_compressed.mp4"
+done
